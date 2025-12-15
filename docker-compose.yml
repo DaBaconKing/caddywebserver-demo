@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy:2.7.5-alpine # Use a recent stable Caddy image
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile # Mount the Caddy configuration file
+      - ./public:/srv # Mount your local public directory to Caddy's site root
+      - caddy_data:/data # Volume for Caddy's automatic HTTPS data
+    networks:
+      - webserver-network
+
+volumes:
+  caddy_data:
+
+networks:
+  webserver-network:
+    driver: bridge
