@@ -1,10 +1,12 @@
-:{$PORT} {
-    # Serve static files from the public directory if they exist
+:80 {
+    # Set the root directory for static files
     root * /public
-    file_server
 
-    # Reverse proxy any requests that didn't match a static file to the Node.js backend
+    # Try serving the static file first. If not found, pass through to the next handler
+    file_server browse
+
+    # Proxy requests that were not handled by file_server to the Node.js backend
     handle {
-        reverse_proxy localhost:{$NODE_PORT}
+        reverse_proxy localhost:8080
     }
 }
