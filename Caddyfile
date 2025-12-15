@@ -1,0 +1,13 @@
+:80 {
+    # Serve static files first
+    root * /srv/public
+    file_server
+
+    # Reverse proxy requests with the /api/* path to the Go backend
+    handle /api/* {
+        reverse_proxy localhost:10000
+    }
+
+    # Optional: Enable compression
+    encode gzip
+}
