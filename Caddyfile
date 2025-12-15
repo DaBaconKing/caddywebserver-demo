@@ -1,13 +1,10 @@
-:80 {
-    # Serve static files first
-    root * /srv/public
+:{$PORT} {
+    # Serve static files from the public directory if they exist
+    root * /public
     file_server
 
-    # Reverse proxy requests with the /api/* path to the Go backend
-    handle /api/* {
-        reverse_proxy localhost:10000
+    # Reverse proxy any requests that didn't match a static file to the Node.js backend
+    handle {
+        reverse_proxy localhost:{$NODE_PORT}
     }
-
-    # Optional: Enable compression
-    encode gzip
 }
